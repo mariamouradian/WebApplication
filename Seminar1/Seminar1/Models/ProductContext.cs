@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Seminar1.Models
 {
@@ -13,7 +14,9 @@ namespace Seminar1.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql("Host=localhost;Username=postgres;Password=example;Database=Product;Port=5432");
+            optionsBuilder
+                .UseLazyLoadingProxies() 
+                .UseNpgsql("Host=localhost;Port=5433;Database=my_products_db;Username=postgres;Password=Example");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -11,7 +11,7 @@ using Seminar1.Models;
 namespace Seminar1.Migrations
 {
     [DbContext(typeof(ProductContext))]
-    [Migration("20250616213943_InitialCreate")]
+    [Migration("20250624211332_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -20,6 +20,9 @@ namespace Seminar1.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "9.0.6")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);

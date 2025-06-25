@@ -1,3 +1,11 @@
+C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\obj\Debug\net9.0\Seminar1.csproj.AssemblyReference.cache
+C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\obj\Debug\net9.0\Seminar1.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\obj\Debug\net9.0\Seminar1.AssemblyInfoInputs.cache
+C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\obj\Debug\net9.0\Seminar1.AssemblyInfo.cs
+C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\obj\Debug\net9.0\Seminar1.csproj.CoreCompileInputs.cache
+C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\obj\Debug\net9.0\Seminar1.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\obj\Debug\net9.0\Seminar1.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\obj\Debug\net9.0\Seminar1.sourcelink.json
 C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\bin\Debug\net9.0\appsettings.Development.json
 C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\bin\Debug\net9.0\appsettings.json
 C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\bin\Debug\net9.0\Seminar1.staticwebassets.endpoints.json
@@ -6,6 +14,9 @@ C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\bin\De
 C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\bin\Debug\net9.0\Seminar1.runtimeconfig.json
 C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\bin\Debug\net9.0\Seminar1.dll
 C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\bin\Debug\net9.0\Seminar1.pdb
+C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\bin\Debug\net9.0\Autofac.dll
+C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\bin\Debug\net9.0\Autofac.Extensions.DependencyInjection.dll
+C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\bin\Debug\net9.0\AutoMapper.dll
 C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\bin\Debug\net9.0\Azure.Core.dll
 C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\bin\Debug\net9.0\Azure.Identity.dll
 C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\bin\Debug\net9.0\Castle.Core.dll
@@ -62,6 +73,7 @@ C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\bin\De
 C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\bin\Debug\net9.0\System.Composition.TypedParts.dll
 C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\bin\Debug\net9.0\System.Configuration.ConfigurationManager.dll
 C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\bin\Debug\net9.0\System.Drawing.Common.dll
+C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\bin\Debug\net9.0\System.Formats.Asn1.dll
 C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\bin\Debug\net9.0\System.IdentityModel.Tokens.Jwt.dll
 C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\bin\Debug\net9.0\System.Memory.Data.dll
 C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\bin\Debug\net9.0\System.Runtime.Caching.dll
@@ -146,13 +158,6 @@ C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\bin\De
 C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\bin\Debug\net9.0\runtimes\win\lib\net6.0\System.Runtime.Caching.dll
 C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\bin\Debug\net9.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
 C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\bin\Debug\net9.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
-C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\obj\Debug\net9.0\Seminar1.csproj.AssemblyReference.cache
-C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\obj\Debug\net9.0\Seminar1.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\obj\Debug\net9.0\Seminar1.AssemblyInfoInputs.cache
-C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\obj\Debug\net9.0\Seminar1.AssemblyInfo.cs
-C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\obj\Debug\net9.0\Seminar1.csproj.CoreCompileInputs.cache
-C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\obj\Debug\net9.0\Seminar1.MvcApplicationPartsAssemblyInfo.cs
-C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\obj\Debug\net9.0\Seminar1.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\obj\Debug\net9.0\scopedcss\bundle\Seminar1.styles.css
 C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\obj\Debug\net9.0\staticwebassets.build.json
 C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\obj\Debug\net9.0\staticwebassets.development.json
@@ -163,6 +168,7 @@ C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\obj\De
 C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\obj\Debug\net9.0\staticwebassets\msbuild.buildMultiTargeting.Seminar1.props
 C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\obj\Debug\net9.0\staticwebassets\msbuild.buildTransitive.Seminar1.props
 C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\obj\Debug\net9.0\staticwebassets.pack.json
+C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\obj\Debug\net9.0\Seminar1.csproj.Up2Date
 C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\obj\Debug\net9.0\Seminar1.dll
 C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar1\Seminar1\obj\Debug\net9.0\refint\Seminar1.dll

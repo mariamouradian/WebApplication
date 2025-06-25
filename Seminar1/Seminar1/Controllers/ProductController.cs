@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Seminar1.Abstraction;
 using Seminar1.Models;
+using Seminar1.Models.DTO;
 
 namespace Seminar1.Controllers
 {
@@ -8,6 +10,13 @@ namespace Seminar1.Controllers
     [Route("[controller]")]
     public class ProductController : ControllerBase
     {
+        private readonly IProductRepository _productRepository;
+
+        public ProductController(IProductRepository productRepository)
+        {
+            _productRepository = productRepository;
+        }
+        
         // Модели ответов
         public class ProductResponse : BaseModel
         {
@@ -22,144 +31,45 @@ namespace Seminar1.Controllers
 
         public class ErrorResponse
         {
-            public string Message { get; set; }
+            public required string Message { get; set; }
             public int StatusCode { get; set; }
         }
 
         public class SuccessResponse
         {
-            public string Message { get; set; }
+            public required string Message { get; set; }
         }
 
         // Получение всех продуктов
         [HttpGet("products")]
         public IActionResult GetProducts()
         {
-            try
-            {
-                using (var context = new ProductContext())
-                {
-                    var products = context.Products.Select(x => new ProductResponse()
-                    {
-                        Id = x.Id,
-                        Name = x.Name,
-                        Description = x.Description,
-                        Cost = x.Cost,
-                        CategoryId = x.CategoryId
-                    }).ToList();
-
-                    return Ok(products);
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new ErrorResponse
-                {
-                    Message = ex.Message,
-                    StatusCode = 500
-                });
-            }
+            var products = _productRepository.GetProducts();
+            return Ok(products);
         }
 
         // Получение всех категорий
         [HttpGet("categories")]
         public IActionResult GetCategories()
         {
-            try
-            {
-                using (var context = new ProductContext())
-                {
-                    var categories = context.Categories.Select(x => new CategoryResponse()
-                    {
-                        Id = x.Id,
-                        Name = x.Name,
-                        Description = x.Description,
-                        ProductCount = x.Products.Count
-                    }).ToList();
-
-                    return Ok(categories);
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new ErrorResponse
-                {
-                    Message = ex.Message,
-                    StatusCode = 500
-                });
-            }
+            var categories = _productRepository.GetCategories();
+            return Ok(categories);
         }
 
         // Добавление продукта
         [HttpPost("products")]
-        public IActionResult AddProduct([FromBody] Product product)
+        public IActionResult AddProduct([FromBody] ProductDto productDto)
         {
-            try
-            {
-                using (var context = new ProductContext())
-                {
-                    if (context.Products.Any(x => x.Name.ToLower() == product.Name.ToLower()))
-                    {
-                        return Conflict(new ErrorResponse
-                        {
-                            Message = "Product already exists",
-                            StatusCode = 409
-                        });
-                    }
-
-                    context.Products.Add(product);
-                    context.SaveChanges();
-
-                    return Ok(new SuccessResponse
-                    {
-                        Message = "Product added successfully"
-                    });
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new ErrorResponse
-                {
-                    Message = ex.Message,
-                    StatusCode = 500
-                });
-            }
+            var result = _productRepository.AddProduct(productDto);
+            return Ok(result);
         }
 
         // Добавление категории
         [HttpPost("categories")]
-        public IActionResult AddCategory([FromBody] Category category)
+        public IActionResult AddCategory([FromBody] CategoryDto categoryDto)
         {
-            try
-            {
-                using (var context = new ProductContext())
-                {
-                    if (context.Categories.Any(x => x.Name.ToLower() == category.Name.ToLower()))
-                    {
-                        return Conflict(new ErrorResponse
-                        {
-                            Message = "Category already exists",
-                            StatusCode = 409
-                        });
-                    }
-
-                    context.Categories.Add(category);
-                    context.SaveChanges();
-
-                    return Ok(new SuccessResponse
-                    {
-                        Message = "Category added successfully"
-                    });
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new ErrorResponse
-                {
-                    Message = ex.Message,
-                    StatusCode = 500
-                });
-            }
+            var result = _productRepository.AddCategory(categoryDto);
+            return Ok(result);
         }
 
         // Удаление продукта
