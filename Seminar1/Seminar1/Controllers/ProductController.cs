@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Seminar1.Abstraction;
 using Seminar1.Models;
 using Seminar1.Models.DTO;
+
 
 namespace Seminar1.Controllers
 {
@@ -11,12 +13,14 @@ namespace Seminar1.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IProductRepository _productRepository;
+        private readonly IMemoryCache _cache;
 
-        public ProductController(IProductRepository productRepository)
+        public ProductController(IProductRepository productRepository, IMemoryCache cache)
         {
             _productRepository = productRepository;
+            _cache = cache;
         }
-        
+
         // Модели ответов
         public class ProductResponse : BaseModel
         {
@@ -40,36 +44,224 @@ namespace Seminar1.Controllers
             public required string Message { get; set; }
         }
 
+        [HttpGet("products/export")]
+        public IActionResult ExportProductsToCsv()
+        {
+            try
+            {
+                var products = _productRepository.GetProducts();
+
+                var csv = new System.Text.StringBuilder();
+                csv.AppendLine("Id,Name,Description,Cost,CategoryId");
+
+                foreach (var product in products)
+                {
+                    csv.AppendLine($"{product.Id},\"{EscapeCsvField(product.Name)}\",\"{EscapeCsvField(product.Description)}\",{product.Cost},{product.CategoryId}");
+                }
+
+                return File(System.Text.Encoding.UTF8.GetBytes(csv.ToString()), "text/csv", "products.csv");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ErrorResponse
+                {
+                    Message = ex.Message,
+                    StatusCode = 500
+                });
+            }
+        }
+
+        private static string EscapeCsvField(string? field)
+        {
+            if (string.IsNullOrEmpty(field))
+                return string.Empty;
+
+            return field.Replace("\"", "\"\"");
+        }
+
+        [HttpGet("cache/stats")]
+        public IActionResult GetCacheStats()
+        {
+            try
+            {
+                var stats = new
+                {
+                    CurrentEntryCount = _cache.GetCurrentStatistics()?.CurrentEntryCount,
+                    TotalHits = _cache.GetCurrentStatistics()?.TotalHits,
+                    TotalMisses = _cache.GetCurrentStatistics()?.TotalMisses
+                };
+
+                return Ok(stats);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ErrorResponse
+                {
+                    Message = ex.Message,
+                    StatusCode = 500
+                });
+            }
+        }
+
+        [HttpGet("cache/stats.html")]
+        public IActionResult GetCacheStatsPage()
+        {
+            var stats = _cache.GetCurrentStatistics();
+            var html = $@"
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cache Statistics</title>
+    <style>
+        body {{ font-family: Arial, sans-serif; margin: 20px; }}
+        table {{ border-collapse: collapse; width: 100%; }}
+        th, td {{ border: 1px solid #ddd; padding: 8px; text-align: left; }}
+        th {{ background-color: #f2f2f2; }}
+    </style>
+</head>
+<body>
+    <h1>Cache Statistics</h1>
+    <table>
+        <tr><th>Metric</th><th>Value</th></tr>
+        <tr><td>Current Entry Count</td><td>{stats?.CurrentEntryCount ?? 0}</td></tr>
+        <tr><td>Total Hits</td><td>{stats?.TotalHits ?? 0}</td></tr>
+        <tr><td>Total Misses</td><td>{stats?.TotalMisses ?? 0}</td></tr>
+    </table>
+</body>
+</html>";
+
+            return Content(html, "text/html");
+        }
+
         // Получение всех продуктов
         [HttpGet("products")]
         public IActionResult GetProducts()
         {
-            var products = _productRepository.GetProducts();
-            return Ok(products);
+            try
+            {
+                using (var context = new ProductContext())
+                {
+                    var products = context.Products.Select(x => new ProductResponse()
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        Description = x.Description,
+                        Cost = x.Cost,
+                        CategoryId = x.CategoryId
+                    }).ToList();
+
+                    return Ok(products);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ErrorResponse
+                {
+                    Message = ex.Message,
+                    StatusCode = 500
+                });
+            }
         }
 
         // Получение всех категорий
         [HttpGet("categories")]
         public IActionResult GetCategories()
         {
-            var categories = _productRepository.GetCategories();
-            return Ok(categories);
+            try
+            {
+                using (var context = new ProductContext())
+                {
+                    var categories = context.Categories.Select(x => new CategoryResponse()
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        Description = x.Description,
+                        ProductCount = x.Products.Count
+                    }).ToList();
+
+                    return Ok(categories);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ErrorResponse
+                {
+                    Message = ex.Message,
+                    StatusCode = 500
+                });
+            }
         }
 
         // Добавление продукта
         [HttpPost("products")]
-        public IActionResult AddProduct([FromBody] ProductDto productDto)
+        public IActionResult AddProduct([FromBody] Product product)
         {
-            var result = _productRepository.AddProduct(productDto);
-            return Ok(result);
+            try
+            {
+                using (var context = new ProductContext())
+                {
+                    if (context.Products.Any(x => x.Name.ToLower() == product.Name.ToLower()))
+                    {
+                        return Conflict(new ErrorResponse
+                        {
+                            Message = "Product already exists",
+                            StatusCode = 409
+                        });
+                    }
+
+                    context.Products.Add(product);
+                    context.SaveChanges();
+
+                    return Ok(new SuccessResponse
+                    {
+                        Message = "Product added successfully"
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ErrorResponse
+                {
+                    Message = ex.Message,
+                    StatusCode = 500
+                });
+            }
         }
 
         // Добавление категории
         [HttpPost("categories")]
-        public IActionResult AddCategory([FromBody] CategoryDto categoryDto)
+        public IActionResult AddCategory([FromBody] Category category)
         {
-            var result = _productRepository.AddCategory(categoryDto);
-            return Ok(result);
+            try
+            {
+                using (var context = new ProductContext())
+                {
+                    if (context.Categories.Any(x => x.Name.ToLower() == category.Name.ToLower()))
+                    {
+                        return Conflict(new ErrorResponse
+                        {
+                            Message = "Category already exists",
+                            StatusCode = 409
+                        });
+                    }
+
+                    context.Categories.Add(category);
+                    context.SaveChanges();
+
+                    return Ok(new SuccessResponse
+                    {
+                        Message = "Category added successfully"
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ErrorResponse
+                {
+                    Message = ex.Message,
+                    StatusCode = 500
+                });
+            }
         }
 
         // Удаление продукта
@@ -196,3 +388,4 @@ namespace Seminar1.Controllers
         }
     }
 }
+    

@@ -10,76 +10,96 @@ namespace Seminar1.Repo
     {
         private readonly IMapper _mapper;
         private readonly IMemoryCache _cache;
+        private readonly ProductContext _context;
 
-        public ProductRepository(IMapper mapper, IMemoryCache cache)
+        public ProductRepository(IMapper mapper, IMemoryCache cache, ProductContext context)
         {
-            _mapper = mapper;
-            _cache = cache;
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _cache = cache ?? throw new ArgumentNullException(nameof(cache));
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
+
         public int AddCategory(CategoryDto category)
         {
-            using (var context = new ProductContext())
+            if (category == null) throw new ArgumentNullException(nameof(category));
+            if (string.IsNullOrEmpty(category.Name)) throw new ArgumentException("Category name is required");
+
+            var entityCategory = _context.Categories
+                .FirstOrDefault(x => x.Name != null &&
+                                   x.Name.ToLower() == category.Name.ToLower());
+
+            if (entityCategory == null)
             {
-                var entityCategory = context.Categories.FirstOrDefault(x => x.Name.ToLower() == category.Name.ToLower());
-                if (entityCategory == null)
-                {
-                    entityCategory = _mapper.Map<Models.Category>(category);
-                    context.Categories.Add(entityCategory);
-                    context.SaveChanges();
-                    _cache.Remove("categories");
-                }
-               
-                return entityCategory.Id;
+                entityCategory = _mapper.Map<Category>(category);
+                _context.Categories.Add(entityCategory);
+                _context.SaveChanges();
+                _cache.Remove("categories");
             }
-            
+
+            return entityCategory.Id;
         }
 
         public int AddProduct(ProductDto product)
         {
-            using (var context = new ProductContext())
+            if (product == null) throw new ArgumentNullException(nameof(product));
+            if (string.IsNullOrEmpty(product.Name)) throw new ArgumentException("Product name is required");
+
+            var entityProduct = _context.Products
+                .FirstOrDefault(x => x.Name != null &&
+                                   x.Name.ToLower() == product.Name.ToLower());
+
+            if (entityProduct == null)
             {
-                var entityProduct = context.Products.FirstOrDefault(x => x.Name.ToLower() == product.Name.ToLower());
-                if (entityProduct == null)
-                {
-                    entityProduct = _mapper.Map<Models.Product>(product);
-                    context.Products.Add(entityProduct);
-                    context.SaveChanges();
-                    _cache.Remove("products");
-                }
-                
-                return entityProduct.Id;
+                entityProduct = _mapper.Map<Product>(product);
+                _context.Products.Add(entityProduct);
+                _context.SaveChanges();
+                _cache.Remove("products");
             }
-           
+
+            return entityProduct.Id;
         }
 
         public IEnumerable<CategoryDto> GetCategories()
         {
-            if (_cache.TryGetValue("categories", out List<CategoryDto> categories))
+            if (_cache.TryGetValue("categories", out List<CategoryDto>? categories) && categories != null)
             {
                 return categories;
             }
-            
-            using (var context = new ProductContext())
-            {
-                var categoriesList = context.Categories.Select(x => _mapper.Map<CategoryDto>(x)).ToList();
-                _cache.Set("categories", categoriesList, TimeSpan.FromMinutes(30));
-                return categoriesList;
-            }
+
+            var categoriesList = _context.Categories
+                .Select(x => new CategoryDto
+                {
+                    Id = x.Id,
+                    Name = x.Name ?? string.Empty,
+                    Description = x.Description ?? string.Empty,
+                    ProductCount = x.Products.Count
+                })
+                .ToList();
+
+            _cache.Set("categories", categoriesList, TimeSpan.FromMinutes(30));
+            return categoriesList;
         }
 
         public IEnumerable<ProductDto> GetProducts()
         {
-            if (_cache.TryGetValue("products", out List<ProductDto> products))
+            if (_cache.TryGetValue("products", out List<ProductDto>? products) && products != null)
             {
                 return products;
             }
-            using (var context = new ProductContext())
-            {
-                var productsList = context.Products.Select(x => _mapper.Map<ProductDto>(x)).ToList();
-                _cache.Set("products", productsList, TimeSpan.FromMinutes(30));
-                return productsList;
-            }
-                
+
+            var productsList = _context.Products
+                .Select(x => new ProductDto
+                {
+                    Id = x.Id,
+                    Name = x.Name ?? string.Empty,
+                    Description = x.Description ?? string.Empty,
+                    Cost = x.Cost,
+                    CategoryId = x.CategoryId
+                })
+                .ToList();
+
+            _cache.Set("products", productsList, TimeSpan.FromMinutes(30));
+            return productsList;
         }
     }
 }

@@ -1,96 +1,90 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Npgsql.EntityFrameworkCore.PostgreSQL;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Seminar1.Models;
 
-namespace Seminar1.Models
+public class ProductContext : DbContext
 {
-    public partial class ProductContext : DbContext
+    public ProductContext()
     {
-        public virtual DbSet<ProductStorage> ProductStorages { get; set; }
+    }
 
-        public virtual DbSet<Product> Products { get; set; }
+    public ProductContext(DbContextOptions<ProductContext> options) : base(options)
+    {
+    }
 
-        public DbSet<Category> Categories { get; set; }
+    public virtual DbSet<ProductStorage> ProductStorages { get; set; } = null!;
+    public virtual DbSet<Product> Products { get; set; } = null!;
+    public virtual DbSet<Category> Categories { get; set; } = null!;
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<Product>(entity =>
         {
-            optionsBuilder
-                .UseLazyLoadingProxies() 
-                .UseNpgsql("Host=localhost;Port=5433;Database=my_products_db;Username=postgres;Password=Example");
-        }
+            entity.ToTable("Products");
+            entity.HasKey(x => x.Id).HasName("ProductID");
+            entity.HasIndex(x => x.Name).IsUnique();
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+            entity.Property(e => e.Name)
+                  .HasColumnName("ProductName")
+                  .HasMaxLength(255)
+                  .IsRequired();
+
+            entity.Property(e => e.Description)
+                  .HasColumnName("Description")
+                  .HasMaxLength(255)
+                  .IsRequired();
+
+            entity.Property(e => e.Cost)
+                  .HasColumnName("Cost")
+                  .IsRequired();
+
+            entity.HasOne(x => x.Category)
+                  .WithMany(c => c.Products)
+                  .HasForeignKey(x => x.CategoryId)
+                  .HasConstraintName("CategoryToProduct");
+        });
+
+        modelBuilder.Entity<Category>(entity =>
         {
-            base.OnModelCreating(modelBuilder);
+            entity.ToTable("ProductCategories");
+            entity.HasKey(x => x.Id).HasName("CategoryId");
+            entity.HasIndex(x => x.Name).IsUnique();
 
-            modelBuilder.Entity<Product>(entity =>
-            {
-                entity.ToTable("Products");
-                entity.HasKey(x => x.Id).HasName("ProductID");
-                entity.HasIndex(x => x.Name).IsUnique();
+            entity.Property(e => e.Name)
+                  .HasColumnName("ProductName")
+                  .HasMaxLength(255)
+                  .IsRequired();
+        });
 
-                entity.Property(e => e.Name)
-                      .HasColumnName("ProductName")
-                      .HasMaxLength(255)
-                      .IsRequired();
+        modelBuilder.Entity<Storage>(entity =>
+        {
+            entity.ToTable("Storage");
+            entity.HasKey(x => x.Id).HasName("StorageID");
 
-                entity.Property(e => e.Description)
-                      .HasColumnName("Description")
-                      .HasMaxLength(255)
-                      .IsRequired();
+            entity.Property(e => e.Name)
+                  .HasColumnName("StorageName")
+                  .HasMaxLength(255)
+                  .IsRequired();
 
-                entity.Property(e => e.Cost)
-                      .HasColumnName("Cost")
-                      .IsRequired();
+            entity.Property(e => e.Count)
+                  .HasColumnName("ProductCount");
 
-                entity.HasOne(x => x.Category)
-                      .WithMany(c => c.Products)
-                      .HasForeignKey(x => x.CategoryId)  // Исправлено с Id на CategoryId
-                      .HasConstraintName("CategoryToProduct");
-            });
+            entity.HasMany(x => x.Products)
+                  .WithMany(p => p.Storages)
+                  .UsingEntity<ProductStorage>(
+                      j => j.HasOne(ps => ps.Product)
+                            .WithMany()
+                            .HasForeignKey(ps => ps.ProductID),
+                      j => j.HasOne(ps => ps.Storage)
+                            .WithMany()
+                            .HasForeignKey(ps => ps.StorageID),
+                      j => j.ToTable("StorageProduct"));
+        });
 
-            modelBuilder.Entity<Category>(entity =>
-            {
-                entity.ToTable("ProductCategories");
-
-                entity.HasKey(x => x.Id).HasName("CategoryId");
-                entity.HasIndex(x => x.Name).IsUnique();
-
-                entity.Property(e => e.Name)
-                      .HasColumnName("ProductName")
-                      .HasMaxLength(255)
-                      .IsRequired();
-            });
-
-            modelBuilder.Entity<Storage>(entity =>
-            {
-                entity.ToTable("Storage");
-                entity.HasKey(x => x.Id).HasName("StorageID");
-
-                entity.Property(e => e.Name)
-                      .HasColumnName("StorageName")
-                      .HasMaxLength(255)
-                      .IsRequired();
-
-                entity.Property(e => e.Count)
-                      .HasColumnName("ProductCount");
-
-                entity.HasMany(x => x.Products)
-                      .WithMany(p => p.Storages)
-                      .UsingEntity<ProductStorage>(
-                          j => j.HasOne(ps => ps.Product)
-                                .WithMany()
-                                .HasForeignKey(ps => ps.ProductID),
-                          j => j.HasOne(ps => ps.Storage)
-                                .WithMany()
-                                .HasForeignKey(ps => ps.StorageID),
-                          j => j.ToTable("StorageProduct"));
-            });
-
-            modelBuilder.Entity<ProductStorage>(entity =>
-            {
-                entity.HasKey(ps => new { ps.ProductID, ps.StorageID });
-            });
-        }
+        modelBuilder.Entity<ProductStorage>(entity =>
+        {
+            entity.HasKey(ps => new { ps.ProductID, ps.StorageID });
+        });
     }
 }

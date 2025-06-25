@@ -1,6 +1,26 @@
 [
   {
     "ContainingType": "Seminar1.Controllers.ProductController",
+    "Method": "GetCacheStats",
+    "RelativePath": "Product/cache/stats",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Seminar1.Controllers.ProductController",
+    "Method": "GetCacheStatsPage",
+    "RelativePath": "Product/cache/stats.html",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Seminar1.Controllers.ProductController",
     "Method": "GetCategories",
     "RelativePath": "Product/categories",
     "HttpMethod": "GET",
@@ -18,8 +38,8 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "categoryDto",
-        "Type": "Seminar1.Models.DTO.CategoryDto",
+        "Name": "category",
+        "Type": "Seminar1.Models.Category",
         "IsRequired": true
       }
     ],
@@ -60,8 +80,8 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "productDto",
-        "Type": "Seminar1.Models.DTO.ProductDto",
+        "Name": "product",
+        "Type": "Seminar1.Models.Product",
         "IsRequired": true
       }
     ],
@@ -102,6 +122,16 @@
         "IsRequired": true
       }
     ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Seminar1.Controllers.ProductController",
+    "Method": "ExportProductsToCsv",
+    "RelativePath": "Product/products/export",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": []
   }
 ]
