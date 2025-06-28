@@ -210,6 +210,8 @@ namespace Seminar3.Controllers
                         });
                     }
 
+
+
                     context.Products.Add(product);
                     context.SaveChanges();
 

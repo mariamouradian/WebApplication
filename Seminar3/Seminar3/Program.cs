@@ -10,9 +10,10 @@ using Seminar3.Query;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services
+
+builder.Services.AddScoped<IProductRepository, MyRepository>();
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("db") ??
-    "Host=localhost;Port=5433;Database=my_GraphQL_db;Username=postgres;Password=Example"));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Регистрация сервисов
 builder.Services.AddScoped<IProductService, ProductService>();

@@ -1,5 +1,6 @@
 ﻿using HotChocolate;
 using Seminar3.Abstractions;
+using Seminar3.Models;
 using Seminar3.Models.Dto;
 
 namespace Seminar3.Mutation
@@ -9,18 +10,18 @@ namespace Seminar3.Mutation
         public record AddProductPayload(int Id);
 
         public AddProductPayload AddProduct(
-            ProductInput productInput,
+            ProductEntity product,
             [Service] IProductService service)
         {
             try
             {
                 var id = service.AddProduct(new ProductDto
                 {
-                    Name = productInput.Name,
-                    Description = productInput.Description,
-                    Price = productInput.Price,
-                    CategoryId = productInput.CategoryId,
-                    StorageId = productInput.StorageId
+                    Name = product.Name,
+                    Description = product.Description,
+                    Price = product.Price,
+                    CategoryId = product.CategoryId,
+                    StorageId = product.StorageId
                 });
                 return new AddProductPayload(id);
             }

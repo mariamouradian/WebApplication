@@ -4,7 +4,7 @@ using Seminar3.Abstractions;
 using Seminar3.Models;
 using Seminar3.Models.Dto;
 
-namespace Seminar3.Mapper
+namespace Seminar3.Services
 {
     public class MyRepository : IProductRepository
     {
@@ -19,6 +19,19 @@ namespace Seminar3.Mapper
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
+        public bool AddProduct(ProductEntity product)
+        {
+            try
+            {
+                _context.Products.Add(product);
+                _context.SaveChanges();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
         public int AddCategory(CategoryDto category)
         {
             if (category == null) throw new ArgumentNullException(nameof(category));
