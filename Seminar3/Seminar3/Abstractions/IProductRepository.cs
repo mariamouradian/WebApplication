@@ -11,5 +11,8 @@ namespace Seminar3.Abstractions
         public int AddProduct(ProductDto product);
 
         public IEnumerable<ProductDto> GetProducts();
+
+        bool AddCategory(object category);
+
     }
 }

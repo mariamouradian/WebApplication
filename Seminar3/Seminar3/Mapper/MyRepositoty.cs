@@ -39,6 +39,14 @@ namespace Seminar3.Mapper
             return entityCategory.Id;
         }
 
+        private readonly List<object> _categories = new();
+
+        public bool AddCategory(object category)
+        {
+            _categories.Add(category);
+            return true;
+        }
+
         public int AddProduct(ProductDto product)
         {
             if (product == null) throw new ArgumentNullException(nameof(product));
