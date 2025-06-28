@@ -150,3 +150,4 @@ C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar3\Seminar3\obj\De
 C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar3\Seminar3\obj\Debug\net8.0\ref\Seminar3.dll
 C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar3\Seminar3\bin\Debug\net8.0\Autofac.Extensions.DependencyInjection.dll
 C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar3\Seminar3\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\MLMuradyan\Desktop\GB Education\WebApplication\Seminar3\Seminar3\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

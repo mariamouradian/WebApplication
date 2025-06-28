@@ -12,7 +12,7 @@ namespace Seminar3.Models
         public decimal Price { get; set; }
         public int CategoryId { get; set; }
         public int StorageId { get; set; }
-        public virtual CategoryEntity ?Category { get; set; }
-        public virtual StorageEntity ?Storage { get; set; }
+        public virtual CategoryEntity? Category { get; set; }
+        public virtual StorageEntity? Storage { get; set; }
     }
 }
